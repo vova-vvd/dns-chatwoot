@@ -14,7 +14,7 @@
       <% if @portal.homepage_link %>
         <div class="px-1 py-2 ltr:ml-8 rtl:mr-8 cursor-pointer block">
           <div class="flex-grow flex-shrink-0">
-            <a id="header-action-button" target="_blank" rel="noopener noreferrer nofollow" href="<%= @portal.homepage_link + (@portal.config['default_locale'] || params[:locale]) %>" class="flex flex-row items-center gap-1 text-sm font-medium whitespace-nowrap text-slate-800 dark:text-slate-100 stroke-slate-700 dark:stroke-slate-200">
+            <a id="header-action-button" target="_blank" rel="noopener noreferrer nofollow" href="<%= @portal.homepage_link + @locale %>" class="flex flex-row items-center gap-1 text-sm font-medium whitespace-nowrap text-slate-800 dark:text-slate-100 stroke-slate-700 dark:stroke-slate-200">
               <%= render partial: 'icons/redirect' %>
               ADnull
             </a>
