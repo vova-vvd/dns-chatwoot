@@ -976,9 +976,9 @@
         "WIDGET_BUBBLE_POSITION_LABEL": "Позиция конструктора виджетов",
         "WIDGET_BUBBLE_TYPE_LABEL": "Тип рамки для виджета",
         "WIDGET_BUBBLE_LAUNCHER_TITLE": {
-          "DEFAULT": "Пообщайтесь с нами",
+          "DEFAULT": "Чат с человеком",
           "LABEL": "Название виджета",
-          "PLACE_HOLDER": "Пообщайтесь с нами"
+          "PLACE_HOLDER": "Чат с человеком"
         },
         "UPDATE": {
           "BUTTON_TEXT": "Обновить настройки виджета",

@@ -134,6 +134,7 @@ gem 'sidekiq', '>= 7.3.1'
 gem 'sidekiq-cron', '>= 1.12.0'
 # for sidekiq healthcheck
 gem 'sidekiq_alive'
+gem 'sidekiq-failures'
 
 ##-- Push notification service --##
 gem 'fcm'

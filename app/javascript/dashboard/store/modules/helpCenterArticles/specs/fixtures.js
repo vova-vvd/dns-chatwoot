@@ -29,7 +29,7 @@ export default {
         title:
           'How do I change my registered email address and/or phone number?',
         content:
-          'Kindly login to your Furrent account to chat with us or submit a request and we would be glad to help you update the contact details on your account.',
+          'Kindly login to your Furrent account to Chat with a person or submit a request and we would be glad to help you update the contact details on your account.',
         description: 'Change my registered email address and/or phone number',
         status: 'draft',
         account_id: 1,

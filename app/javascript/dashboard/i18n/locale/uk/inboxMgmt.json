@@ -976,9 +976,9 @@
         "WIDGET_BUBBLE_POSITION_LABEL": "Позиція віджету",
         "WIDGET_BUBBLE_TYPE_LABEL": "Тип віджету",
         "WIDGET_BUBBLE_LAUNCHER_TITLE": {
-          "DEFAULT": "Почніть розмову з нами",
+          "DEFAULT": "Чат з людиною",
           "LABEL": "Заголовок віджета",
-          "PLACE_HOLDER": "Почніть розмову з нами"
+          "PLACE_HOLDER": "Чат з людиною"
         },
         "UPDATE": {
           "BUTTON_TEXT": "Оновити налаштування віджета",
