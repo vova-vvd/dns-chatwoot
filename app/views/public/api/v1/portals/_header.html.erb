@@ -105,7 +105,9 @@
         <% if @portal.logo.present? %>
           <img src="<%= url_for(@portal.logo) %>" class="w-auto h-10 ltr:mr-2 rtl:ml-2" draggable="false" />
         <% end %>
-         <span class="text-lg font-semibold text-slate-900 truncate dark:text-white <%= @portal.logo.present? ? 'hidden' : 'sm:hidden block' %>"><%= @portal.name %></span>
+         <span class="text-lg font-semibold text-slate-900 truncate dark:text-white <%= @portal.logo.present? ? 'hidden' : 'sm:hidden block' %>">
+           ADnull - <%= I18n.t('public_portal.common.title') ||  @portal.name %>
+         </span>
       </a>
 
       <!-- Mobile Menu Component -->

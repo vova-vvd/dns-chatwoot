@@ -17,6 +17,12 @@
 #To learn more, please read the Rails Internationalization guide
 #available at https://guides.rubyonrails.org/i18n.html.
 ru:
+  chat:
+    launcherTitle: 'Чат с человеком'
+    welcomeTitle: 'Здравствуйте!'
+    welcomeDescription: 'Начните разговор со службой поддержки или просмотрите статьи с часто задаваемыми вопросами'
+    availableMessage: 'Консультант онлайн!'
+    unavailableMessage: 'Консультант не в сети, оставьте свой email и вопрос, и вы обязательно получите ответ!'
   hello: 'Привет мир'
   inbox:
     reauthorization:

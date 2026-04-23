@@ -17,7 +17,13 @@
 #To learn more, please read the Rails Internationalization guide
 #available at https://guides.rubyonrails.org/i18n.html.
 uk:
-  hello: 'Привіт, світе'
+  chat:
+    launcherTitle: 'Чат з людиною'
+    welcomeTitle: 'Вітаю!'
+    welcomeDescription: 'Розпочніть розмову із службою підтримки або перегляньте статті із найчастішими запитаннями'
+    availableMessage: 'Консультант онлайн!'
+    unavailableMessage: "Консультант не в мережі, залишіть свій імейл та запитання і ви обов'язково отримаєте відповідь!"
+  hello: 'Привіт, світ!'
   inbox:
     reauthorization:
       success: 'Channel reauthorized successfully'

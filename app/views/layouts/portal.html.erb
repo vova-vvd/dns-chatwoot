@@ -55,6 +55,13 @@ By default, it renders:
       document.documentElement.classList.add('light');
     }
   </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-BM6SV37MT9"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-BM6SV37MT9');
+  </script>
 </head>
 <body>
 <div id="portal" class="antialiased">
@@ -92,7 +99,6 @@ By default, it renders:
     })();
   </script>
 <% end %>
-</body>
 <style>
   html.dark {
     --dynamic-portal-bg: <%= generate_portal_bg(@portal.color, 'dark') %>;
@@ -155,8 +161,34 @@ By default, it renders:
     isPlainLayoutEnabled: '<%= @is_plain_layout_enabled %>',
     tocHeader: '<%= I18n.t('public_portal.toc_header') %>',
   };
+  window.chatwootSettings = {
+    'welcomeTitle': '<%= I18n.t('chat.welcomeTitle') %>',
+    'welcomeDescription': '<%= I18n.t('chat.welcomeDescription') %>',
+    'availableMessage': '<%= I18n.t('chat.availableMessage') %>',
+    'unavailableMessage': '<%= I18n.t('chat.unavailableMessage') %>',
+    'position': 'right',
+    'type': 'expanded_bubble',
+    'darkMode': 'auto',
+    'locale': '<%= @locale %>',
+    'showPopoutButton': true,
+  };
 </script>
 <% if @portal.channel_web_widget.present? && !@is_plain_layout_enabled %>
-  <%= @portal.channel_web_widget.web_widget_script.html_safe %>
+  <script>
+    (function(d, t) {
+      var BASE_URL = 'https://docs.adnull.com';
+      var g = d.createElement(t), s = d.getElementsByTagName(t)[0];
+      g.src = BASE_URL + '/packs/js/sdk.js';
+      g.async = true;
+      s.parentNode.insertBefore(g, s);
+      g.onload = function() {
+        window.chatwootSDK.run({
+          websiteToken: 'xKUL3xicphFewYkPEaf1J94Q',
+          baseUrl: BASE_URL,
+        });
+      };
+    })(document, 'script');
+  </script>
 <% end %>
+</body>
 </html>

@@ -1,6 +1,6 @@
 <% content_for :head do %>
-  <title><%= @category.name %> | <%= @portal.name %></title>
-  <meta name="title" content="<%= @category.name %> | <%= @portal.name %>">
+  <title><%= @category.name %> | ADnull - <%= I18n.t('public_portal.common.title') || @portal.name %></title>
+  <meta name="title" content="<%= @category.name %> | ADnull - <%= I18n.t('public_portal.common.title') || @portal.name %>">
   <% if @category.description.present? %>
     <meta name="description" content="<%= @category.description %>">
     <meta property="og:description" content="<%= @category.description %>">

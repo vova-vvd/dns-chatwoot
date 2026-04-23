@@ -30,6 +30,12 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
+  chat:
+    launcherTitle: 'Chat with a person'
+    welcomeTitle: 'Welcome!'
+    welcomeDescription: 'Start a conversation with support or browse articles with frequently asked questions'
+    availableMessage: 'Consultant is online!'
+    unavailableMessage: 'The consultant is offline. Leave your email and question, and you will receive a response!'
   hello: 'Hello world'
   inbox:
     reauthorization:
