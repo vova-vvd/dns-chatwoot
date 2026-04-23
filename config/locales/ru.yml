@@ -357,6 +357,7 @@ ru:
     hero:
       sub_title: Ищите здесь статьи или выберите категории, указанные ниже.
     common:
+      title: Центр помощи
       home: Главная
       last_updated_on: Обновлено %{last_updated_on}
       view_all_articles: Посмотреть все
@@ -372,7 +373,7 @@ ru:
       made_with: Сделано с
     header:
       go_to_homepage: Сайт
-      visit_website: Посетить сайт
+      visit_website: Перейти на ADnull
       appearance:
         system: Тема
         light: Светлая
@@ -438,6 +439,7 @@ ru:
   agent_capacity_policy:
     inbox_already_assigned: 'Входящие уже были назначены на эту политику'
   portals:
+    header_text: DNS Блокировка рекламы - Вопросы и Ответы
     send_instructions:
       email_required: 'Необходимо указать Email'
       invalid_email_format: 'Неправильный формат email'

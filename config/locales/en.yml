@@ -382,6 +382,7 @@ en:
     hero:
       sub_title: Search for the articles here or browse the categories below.
     common:
+      title: Help Center
       home: Home
       last_updated_on: Last updated on %{last_updated_on}
       view_all_articles: View all
@@ -397,7 +398,7 @@ en:
       made_with: Made with
     header:
       go_to_homepage: Website
-      visit_website: Visit website
+      visit_website: Open ADnull
       appearance:
         system: Theme
         light: Light
@@ -455,6 +456,7 @@ en:
   agent_capacity_policy:
     inbox_already_assigned: 'Inbox has already been assigned to this policy'
   portals:
+    header_text: DNS AD blocker - Questions and Answers
     send_instructions:
       email_required: 'Email is required'
       invalid_email_format: 'Invalid email format'

@@ -357,6 +357,7 @@ uk:
     hero:
       sub_title: Шукайте тут або перегляньте категорії нижче.
     common:
+      title: Центр допомоги
       home: Головна
       last_updated_on: Востаннє оновлено %{last_updated_on}
       view_all_articles: Переглянути все
@@ -371,8 +372,8 @@ uk:
     footer:
       made_with: Зроблено з
     header:
-      go_to_homepage: Вебсайт
-      visit_website: Visit website
+      go_to_homepage: Сайт
+      visit_website: Перейти на ADnull
       appearance:
         system: Тема
         light: Світла
@@ -438,6 +439,7 @@ uk:
   agent_capacity_policy:
     inbox_already_assigned: 'Inbox has already been assigned to this policy'
   portals:
+    header_text: DNS Блокування реклами - Питання та Відповіді
     send_instructions:
       email_required: 'Необхідно вказати електронну адресу'
       invalid_email_format: 'Invalid email format'

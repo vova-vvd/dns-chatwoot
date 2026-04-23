@@ -3,9 +3,11 @@
     <div class="flex items-center w-full py-5 overflow-hidden">
       <a href="<%= generate_home_link(@portal.slug, @locale, @theme_from_params, @is_plain_layout_enabled) %>" class="flex items-center min-w-0 h-10">
         <% if @portal.logo.present? %>
-          <img src="<%= url_for(@portal.logo) %>" class="w-auto h-10 ltr:mr-2 rtl:ml-2" draggable="false" />
+          <img alt="ADnull - <%= I18n.t('public_portal.common.title') || @portal.name %>" src="<%= url_for(@portal.logo) %>" class="w-auto h-10 ltr:mr-2 rtl:ml-2" draggable="false" />
         <% end %>
-        <span class="text-lg font-semibold text-slate-900 truncate dark:text-white <%= @portal.logo.present? ? 'hidden lg:block' : 'hidden sm:block' %>"><%= @portal.name %></span>
+        <span class="text-lg font-semibold text-slate-900 truncate dark:text-white <%= @portal.logo.present? ? 'hidden lg:block' : 'hidden sm:block' %>">
+          <%= I18n.t('public_portal.common.title') || @portal.name %>
+        </span>
       </a>
     </div>
 
@@ -16,7 +18,7 @@
           <div class="flex-grow flex-shrink-0">
             <a id="header-action-button" target="_blank" rel="noopener noreferrer nofollow" href="<%= @portal.homepage_link + @locale %>" class="flex flex-row items-center gap-1 text-sm font-medium whitespace-nowrap text-slate-800 dark:text-slate-100 stroke-slate-700 dark:stroke-slate-200">
               <%= render partial: 'icons/redirect' %>
-              ADnull
+              ADnull - <%= I18n.t('public_portal.header.go_to_homepage') %>
             </a>
           </div>
         </div>
