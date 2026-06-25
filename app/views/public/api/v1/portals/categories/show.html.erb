@@ -1,17 +1,20 @@
 <% content_for :head do %>
-  <title><%= @category.name %> | ADnull - <%= I18n.t('public_portal.common.title') || @portal.name %></title>
-  <meta name="title" content="<%= @category.name %> | ADnull - <%= I18n.t('public_portal.common.title') || @portal.name %>">
-  <% if @category.description.present? %>
-    <meta name="description" content="<%= @category.description %>">
-    <meta property="og:description" content="<%= @category.description %>">
-    <meta name="twitter:description" content="<%= @category.description %>">
-  <% end %>
-  <% if @og_image_url.present? %>
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="og:image" content="<%= @og_image_url.html_safe %>">
-    <meta property="og:image" content="<%= @og_image_url.html_safe %>">
-    <meta name="twitter:image" content="<%= @og_image_url.html_safe %>">
-  <% end %>
+  <%
+    category_description = seo_description(@category.description)
+    category_canonical = "#{portal_base_url(@portal)}#{generate_category_link(portal_slug: @portal.slug, category_locale: @category.locale, category_slug: @category.slug, theme: false, is_plain_layout_enabled: false)}"
+  %>
+  <%= render "public/api/v1/portals/seo_meta",
+        title: seo_title(@category.name),
+        description: category_description,
+        canonical: category_canonical,
+        og_image: @og_image_url,
+        og_type: "website",
+        locale: @category.locale,
+        alternates: category_alternate_links(@portal, @category) %>
+  <%= render "public/api/v1/portals/json_ld", blocks: [
+        collection_page_jsonld(@category.name, category_canonical, category_description),
+        breadcrumb_jsonld(category_breadcrumb_items(@portal, @category))
+      ] %>
 <% end %>
 
 <% if !@is_plain_layout_enabled %>

@@ -1,24 +1,26 @@
 <% content_for :head do %>
-  <title><%= @article.title %> | ADnull - <%= I18n.t('public_portal.common.title') ||  @portal.name %></title>
-  <% if @article.meta["title"].present? %>
-    <meta name="title" content="<%= @article.meta["title"] %>">
-    <meta property="og:title" content="<%= @article.meta["title"] %>">
-    <meta name="twitter:title" content="<%= @article.meta["title"] %>">
-  <% end %>
-  <% if @article.meta["description"].present? %>
-    <meta name="description" content="<%= @article.meta["description"] %>">
-    <meta property="og:description" content="<%= @article.meta["description"] %>">
-    <meta name="twitter:description" content="<%= @article.meta["description"] %>">
-  <% end %>
+  <%
+    article_title = @article.meta["title"].presence || @article.title
+    article_description = @article.meta["description"].presence || @article.description.presence || Articles::SeoMetaBuilder.new(@article).description
+    article_canonical = "#{portal_base_url(@portal)}#{generate_article_link(@portal.slug, @article.slug, false, false)}"
+  %>
+  <%= render "public/api/v1/portals/seo_meta",
+        title: seo_title(article_title),
+        description: article_description,
+        canonical: article_canonical,
+        og_image: @og_image_url,
+        og_type: "article",
+        locale: @article.locale,
+        published_time: @article.created_at,
+        modified_time: @article.updated_at,
+        alternates: article_alternate_links(@portal, @article) %>
   <% if @article.meta["tags"].present? %>
-    <meta name="tags" content="<%= @article.meta["tags"].join(',') %>">
+    <meta name="keywords" content="<%= @article.meta["tags"].join(',') %>">
   <% end %>
-  <% if @og_image_url.present? %>
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="og:image" content="<%= @og_image_url.html_safe %>">
-    <meta property="og:image" content="<%= @og_image_url.html_safe %>">
-    <meta name="twitter:image" content="<%= @og_image_url.html_safe %>">
-  <% end %>
+  <%= render "public/api/v1/portals/json_ld", blocks: [
+        article_jsonld(@article, article_canonical, article_description, @og_image_url),
+        breadcrumb_jsonld(article_breadcrumb_items(@portal, @article))
+      ] %>
 <% end %>
 
 <% if !@is_plain_layout_enabled %>

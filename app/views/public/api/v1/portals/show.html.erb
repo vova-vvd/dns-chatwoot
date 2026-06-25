@@ -1,3 +1,22 @@
+<% content_for :head do %>
+  <%
+    home_path = generate_home_link(@portal.slug, @locale, false, false)
+    home_url = "#{portal_base_url(@portal)}#{home_path}"
+  %>
+  <%= render "public/api/v1/portals/seo_meta",
+        title: seo_title(@portal.page_title),
+        description: seo_description(@portal.header_text),
+        canonical: home_url,
+        og_image: @og_image_url,
+        og_type: "website",
+        locale: @locale,
+        alternates: portal_home_alternate_links(@portal) %>
+  <%= render "public/api/v1/portals/json_ld", blocks: [
+        website_jsonld(home_url, "#{portal_base_url(@portal)}/hc/#{@portal.slug}/#{@locale}/articles"),
+        organization_jsonld(@portal)
+      ] %>
+<% end %>
+
 <%= render "public/api/v1/portals/hero", portal: @portal %>
 <div class="max-w-5xl w-full flex flex-col flex-grow mx-auto py-8 px-4 md:px-8 gap-6">
   <%# Featured Articles %>

@@ -1,0 +1,61 @@
+<%
+  description = local_assigns[:description]
+  canonical = local_assigns[:canonical]
+  og_image = local_assigns[:og_image]
+  og_type = local_assigns.fetch(:og_type, 'website')
+  robots = local_assigns.fetch(:robots, 'index, follow')
+  published_time = local_assigns[:published_time]
+  modified_time = local_assigns[:modified_time]
+  alternates = Array(local_assigns[:alternates])
+  page_locale = local_assigns[:locale]
+%>
+<title><%= title %></title>
+<meta name="robots" content="<%= robots %>">
+<% if description.present? %>
+  <meta name="description" content="<%= description %>">
+<% end %>
+<% if canonical.present? %>
+  <link rel="canonical" href="<%= canonical %>">
+<% end %>
+
+<%# hreflang locale alternates %>
+<% alternates.each do |alt| %>
+  <link rel="alternate" hreflang="<%= alt[:hreflang] %>" href="<%= alt[:href] %>">
+<% end %>
+<% if alternates.present? %>
+  <link rel="alternate" hreflang="x-default" href="<%= alternates.first[:href] %>">
+<% end %>
+
+<%# Open Graph %>
+<meta property="og:title" content="<%= title %>">
+<% if description.present? %>
+  <meta property="og:description" content="<%= description %>">
+<% end %>
+<meta property="og:type" content="<%= og_type %>">
+<% if canonical.present? %>
+  <meta property="og:url" content="<%= canonical %>">
+<% end %>
+<meta property="og:site_name" content="<%= seo_site_name %>">
+<% if page_locale.present? %>
+  <meta property="og:locale" content="<%= page_locale %>">
+<% end %>
+<% if og_type == 'article' %>
+  <% if published_time.present? %>
+    <meta property="article:published_time" content="<%= published_time.iso8601 %>">
+  <% end %>
+  <% if modified_time.present? %>
+    <meta property="article:modified_time" content="<%= modified_time.iso8601 %>">
+  <% end %>
+<% end %>
+
+<%# Twitter %>
+<meta name="twitter:card" content="<%= og_image.present? ? 'summary_large_image' : 'summary' %>">
+<meta name="twitter:title" content="<%= title %>">
+<% if description.present? %>
+  <meta name="twitter:description" content="<%= description %>">
+<% end %>
+
+<% if og_image.present? %>
+  <meta property="og:image" content="<%= og_image %>">
+  <meta name="twitter:image" content="<%= og_image %>">
+<% end %>

@@ -1,9 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <% base = portal_base_url(@portal) %>
+  <% locales = Array(@portal.config['allowed_locales']).presence || [@portal.default_locale] %>
+
+  <%# Portal home (per locale) %>
+  <% home_alternates = portal_home_alternate_links(@portal) %>
+  <% locales.each do |locale| %>
+    <url>
+      <loc><%= base %><%= generate_home_link(@portal.slug, locale, false, false) %></loc>
+      <lastmod><%= @portal.updated_at.strftime("%Y-%m-%d") %></lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>1.0</priority>
+      <% home_alternates.each do |alt| %>
+        <xhtml:link rel="alternate" hreflang="<%= alt[:hreflang] %>" href="<%= alt[:href] %>" />
+      <% end %>
+    </url>
+  <% end %>
+
+  <%# Categories that contain published articles %>
+  <% @portal.categories.joins(:articles).where(articles: { status: :published }).group('categories.id').order(position: :asc).each do |category| %>
+    <url>
+      <loc><%= base %><%= generate_category_link(portal_slug: @portal.slug, category_locale: category.locale, category_slug: category.slug, theme: false, is_plain_layout_enabled: false) %></loc>
+      <lastmod><%= category.updated_at.strftime("%Y-%m-%d") %></lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.8</priority>
+      <% category_alternate_links(@portal, category).each do |alt| %>
+        <xhtml:link rel="alternate" hreflang="<%= alt[:hreflang] %>" href="<%= alt[:href] %>" />
+      <% end %>
+    </url>
+  <% end %>
+
+  <%# Published articles %>
   <% @portal.articles.where(status: :published).each do |article| %>
     <url>
-      <loc><%= @help_center_url %><%= generate_article_link(@portal.slug, article.slug, false, false) %></loc>
+      <loc><%= base %><%= generate_article_link(@portal.slug, article.slug, false, false) %></loc>
       <lastmod><%= article.updated_at.strftime("%Y-%m-%d") %></lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.7</priority>
+      <% article_alternate_links(@portal, article).each do |alt| %>
+        <xhtml:link rel="alternate" hreflang="<%= alt[:hreflang] %>" href="<%= alt[:href] %>" />
+      <% end %>
     </url>
   <% end %>
 </urlset>
