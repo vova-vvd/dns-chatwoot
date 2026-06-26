@@ -15,7 +15,8 @@
   <% end %>
 
   <%# Categories that contain published articles %>
-  <% @portal.categories.joins(:articles).where(articles: { status: :published }).group('categories.id').order(position: :asc).each do |category| %>
+  <% @portal.categories.joins(:articles).where(articles: { status: :published }).group('categories.id').order(position: :asc)
+            .includes(:associated_categories, root_category: :associated_categories).each do |category| %>
     <url>
       <loc><%= portal_url(@portal, category_path_for(@portal, category)) %></loc>
       <lastmod><%= category.updated_at.strftime("%Y-%m-%d") %></lastmod>
@@ -28,7 +29,7 @@
   <% end %>
 
   <%# Published articles %>
-  <% @portal.articles.where(status: :published).each do |article| %>
+  <% @portal.articles.where(status: :published).includes(:associated_articles, root_article: :associated_articles).each do |article| %>
     <url>
       <loc><%= portal_url(@portal, article_path_for(@portal, article)) %></loc>
       <lastmod><%= article.updated_at.strftime("%Y-%m-%d") %></lastmod>

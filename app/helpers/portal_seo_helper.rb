@@ -73,8 +73,13 @@ module PortalSeoHelper
   # Association links take precedence per locale.
   def category_translation_variants(portal, category)
     root = category.root_category || category
-    candidates = [root] + root.associated_categories.to_a + portal.categories.where(slug: category.slug).to_a
+    candidates = [root] + root.associated_categories.to_a + categories_by_slug(portal)[category.slug].to_a
     candidates.each_with_object({}) { |variant, by_locale| by_locale[variant.locale] ||= variant }.values
+  end
+
+  # Memoized per request so the sitemap doesn't fire a slug lookup per category.
+  def categories_by_slug(portal)
+    (@categories_by_slug ||= {})[portal.id] ||= portal.categories.group_by(&:slug)
   end
 
   def article_breadcrumb_items(portal, article)
