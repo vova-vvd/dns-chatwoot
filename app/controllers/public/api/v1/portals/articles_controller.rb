@@ -19,6 +19,7 @@ class Public::Api::V1::Portals::ArticlesController < Public::Api::V1::Portals::B
 
   def show
     @og_image_url = helpers.set_og_image_url(@portal.name, @article.title)
+    fresh_when(etag: portal_etag(@article), last_modified: portal_content_last_modified, public: true)
   end
 
   def tracking_pixel
@@ -60,7 +61,7 @@ class Public::Api::V1::Portals::ArticlesController < Public::Api::V1::Portals::B
 
   def set_article
     @article = @portal.articles.find_by(slug: permitted_params[:article_slug])
-    @parsed_content = render_article_content(@article.content)
+    @parsed_content = Rails.cache.fetch([@article]) { render_article_content(@article.content) } if @article
   end
 
   def set_category

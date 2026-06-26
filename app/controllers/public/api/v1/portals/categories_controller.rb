@@ -10,6 +10,7 @@ class Public::Api::V1::Portals::CategoriesController < Public::Api::V1::Portals:
 
   def show
     @og_image_url = helpers.set_og_image_url(@portal.name, @category.name)
+    fresh_when(etag: portal_etag(@category), last_modified: portal_content_last_modified, public: true)
   end
 
   private

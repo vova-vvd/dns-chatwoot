@@ -6,9 +6,12 @@ class Public::Api::V1::PortalsController < Public::Api::V1::Portals::BaseControl
 
   def show
     @og_image_url = helpers.set_og_image_url('', @portal.header_text)
+    fresh_when(etag: portal_etag(@portal), last_modified: portal_content_last_modified, public: true)
   end
 
-  def sitemap; end
+  def sitemap
+    fresh_when(etag: portal_etag(@portal), last_modified: portal_content_last_modified, public: true)
+  end
 
   private
 

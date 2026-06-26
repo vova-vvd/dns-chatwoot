@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <% cache([@portal, portal_content_version, request.host]) do %>
   <%# Portal home (per locale) %>
   <% home_alternates = portal_home_alternate_links(@portal) %>
   <% portal_locales(@portal).each do |locale| %>
@@ -39,5 +40,6 @@
         <xhtml:link rel="alternate" hreflang="<%= alt[:hreflang] %>" href="<%= alt[:href] %>" />
       <% end %>
     </url>
+  <% end %>
   <% end %>
 </urlset>

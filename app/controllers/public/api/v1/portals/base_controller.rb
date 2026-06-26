@@ -7,7 +7,36 @@ class Public::Api::V1::Portals::BaseController < PublicController
   around_action :set_locale
   after_action :allow_iframe_requests
 
+  helper_method :portal_content_version, :portal_content_last_modified
+
   private
+
+  # Cache key that changes whenever any of the portal's published content changes,
+  # so fragment caches and ETags self-invalidate on edits. Article view counts use
+  # update_column and don't bump updated_at, so views won't bust the cache.
+  def portal_content_version
+    @portal_content_version ||= [
+      @portal.cache_key_with_version,
+      @portal.articles.published.maximum(:updated_at), @portal.articles.published.count,
+      @portal.categories.maximum(:updated_at), @portal.categories.count
+    ]
+  end
+
+  # Newest timestamp across the same content, used for Last-Modified so an
+  # If-Modified-Since-only request can't get a false 304 after a sibling edit.
+  def portal_content_last_modified
+    @portal_content_last_modified ||= [
+      @portal.updated_at,
+      @portal.articles.published.maximum(:updated_at),
+      @portal.categories.maximum(:updated_at)
+    ].compact.max
+  end
+
+  # ETag for a portal page, varied by content version and the request variants
+  # (host, theme, plain layout, locale) so different representations don't collide.
+  def portal_etag(record)
+    [record, portal_content_version, request.host, @theme_from_params, @is_plain_layout_enabled, @locale]
+  end
 
   def show_plain_layout
     @is_plain_layout_enabled = params[:show_plain_layout] == 'true'

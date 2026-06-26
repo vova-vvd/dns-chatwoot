@@ -1,4 +1,5 @@
 <% content_for :head do %>
+  <% cache([@portal, portal_content_version, request.host, @locale]) do %>
   <% home_url = portal_url(@portal, home_path_for(@portal, @locale)) %>
   <%= render "public/api/v1/portals/seo_meta",
         title: seo_title(@portal.page_title),
@@ -12,8 +13,10 @@
         website_jsonld(home_url, portal_url(@portal, "/hc/#{@portal.slug}/#{@locale}/articles")),
         organization_jsonld(@portal)
       ] %>
+  <% end %>
 <% end %>
 
+<% cache([@portal, portal_content_version, request.host, @theme_from_params, @is_plain_layout_enabled, @locale]) do %>
 <%= render "public/api/v1/portals/hero", portal: @portal %>
 <div class="max-w-5xl w-full flex flex-col flex-grow mx-auto py-8 px-4 md:px-8 gap-6">
   <%# Featured Articles %>
@@ -33,3 +36,4 @@
     <% end %>
   </div>
 </div>
+<% end %>
