@@ -1,7 +1,7 @@
 <% content_for :head do %>
   <%= render "public/api/v1/portals/seo_meta",
         title: seo_title(@category.present? ? @category.name : @portal.page_title),
-        canonical: "#{portal_base_url(@portal)}#{request.path}",
+        canonical: portal_url(@portal, request.path),
         robots: "noindex, follow",
         locale: @locale %>
 <% end %>

@@ -1,4 +1,19 @@
 # rubocop:disable Metrics/BlockLength
+
+# A group is linkable only when it spans >=2 locales with at most one record per
+# locale, so we never guess between two same-locale candidates.
+def seo_unambiguous_group?(group)
+  group.size >= 2 && group.map(&:locale).uniq.size == group.size
+end
+
+# Picks the default-locale record as root (or the first) and points every other
+# record's translation foreign key at it. Returns nothing useful; callers report.
+def seo_link_group(group, default_locale, foreign_key)
+  root = group.find { |record| record.locale == default_locale } || group.first
+  root.update_columns(foreign_key => nil) # rubocop:disable Rails/SkipsModelValidations
+  (group - [root]).each { |record| record.update_columns(foreign_key => root.id) } # rubocop:disable Rails/SkipsModelValidations
+end
+
 namespace :seo do
   desc 'Generate SEO meta (title, description, keywords) for all articles from their content and overwrite existing meta'
   task generate_article_meta: :environment do
@@ -33,10 +48,8 @@ namespace :seo do
       linked = []
       skipped = []
       portal.articles.group_by { |article| norm.call(article.slug) }.each do |token, arts|
-        if arts.size >= 2 && arts.map(&:locale).uniq.size == arts.size
-          root = arts.find { |a| a.locale == portal.default_locale } || arts.first
-          root.update_columns(associated_article_id: nil) # rubocop:disable Rails/SkipsModelValidations
-          (arts - [root]).each { |a| a.update_columns(associated_article_id: root.id) } # rubocop:disable Rails/SkipsModelValidations
+        if seo_unambiguous_group?(arts)
+          seo_link_group(arts, portal.default_locale, :associated_article_id)
           linked << [token, arts.sort_by(&:locale).map { |a| "#{a.locale}:#{a.id}" }]
         else
           skipped << arts.sort_by(&:locale).map { |a| "#{a.locale}:#{a.id} #{a.slug}" }
@@ -66,11 +79,9 @@ namespace :seo do
 
       linked = []
       groups.each_value do |cats|
-        next unless cats.size >= 2 && cats.map(&:locale).uniq.size == cats.size
+        next unless seo_unambiguous_group?(cats)
 
-        root = cats.find { |c| c.locale == portal.default_locale } || cats.first
-        root.update_columns(associated_category_id: nil) # rubocop:disable Rails/SkipsModelValidations
-        (cats - [root]).each { |c| c.update_columns(associated_category_id: root.id) } # rubocop:disable Rails/SkipsModelValidations
+        seo_link_group(cats, portal.default_locale, :associated_category_id)
         linked << cats.sort_by(&:locale).map { |c| "#{c.locale}:#{c.id}(#{c.slug})" }
       end
 

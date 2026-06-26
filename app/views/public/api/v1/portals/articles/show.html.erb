@@ -2,7 +2,7 @@
   <%
     article_title = @article.meta["title"].presence || @article.title
     article_description = @article.meta["description"].presence || @article.description.presence || Articles::SeoMetaBuilder.new(@article).description
-    article_canonical = "#{portal_base_url(@portal)}#{generate_article_link(@portal.slug, @article.slug, false, false)}"
+    article_canonical = portal_url(@portal, article_path_for(@portal, @article))
   %>
   <%= render "public/api/v1/portals/seo_meta",
         title: seo_title(article_title),

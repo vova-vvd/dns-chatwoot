@@ -1,7 +1,7 @@
 <% content_for :head do %>
   <%
     category_description = seo_description(@category.description)
-    category_canonical = "#{portal_base_url(@portal)}#{generate_category_link(portal_slug: @portal.slug, category_locale: @category.locale, category_slug: @category.slug, theme: false, is_plain_layout_enabled: false)}"
+    category_canonical = portal_url(@portal, category_path_for(@portal, @category))
   %>
   <%= render "public/api/v1/portals/seo_meta",
         title: seo_title(@category.name),

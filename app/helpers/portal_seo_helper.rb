@@ -15,11 +15,29 @@ module PortalSeoHelper
     request.base_url
   end
 
+  def portal_url(portal, path)
+    "#{portal_base_url(portal)}#{path}"
+  end
+
+  def portal_locales(portal)
+    Array(portal.config['allowed_locales']).presence || [portal.default_locale]
+  end
+
   def seo_description(text, limit = 160)
     return if text.blank?
 
     plain = ChatwootMarkdownRenderer.new(text.to_s).render_markdown_to_plain_text
     plain.gsub(/\s+/, ' ').strip.truncate(limit, separator: ' ')
+  end
+
+  # ---- canonical paths (theme + plain layout always disabled for public SEO) ----
+
+  def home_path_for(portal, locale)
+    generate_home_link(portal.slug, locale, false, false)
+  end
+
+  def article_path_for(portal, article)
+    generate_article_link(portal.slug, article.slug, false, false)
   end
 
   def category_path_for(portal, category)
@@ -32,25 +50,21 @@ module PortalSeoHelper
   # ---- hreflang alternates ----
 
   def portal_home_alternate_links(portal)
-    base = portal_base_url(portal)
-    locales = Array(portal.config['allowed_locales']).presence || [portal.default_locale]
-    locales.map do |locale|
-      { hreflang: locale, href: "#{base}#{generate_home_link(portal.slug, locale, false, false)}" }
+    portal_locales(portal).map do |locale|
+      { hreflang: locale, href: portal_url(portal, home_path_for(portal, locale)) }
     end
   end
 
   def article_alternate_links(portal, article)
-    base = portal_base_url(portal)
     root = article.root_article || article
     ([root] + root.associated_articles.to_a).uniq.select(&:published?).map do |variant|
-      { hreflang: variant.locale, href: "#{base}#{generate_article_link(portal.slug, variant.slug, false, false)}" }
+      { hreflang: variant.locale, href: portal_url(portal, article_path_for(portal, variant)) }
     end
   end
 
   def category_alternate_links(portal, category)
-    base = portal_base_url(portal)
     category_translation_variants(portal, category).map do |variant|
-      { hreflang: variant.locale, href: "#{base}#{category_path_for(portal, variant)}" }
+      { hreflang: variant.locale, href: portal_url(portal, category_path_for(portal, variant)) }
     end
   end
 
@@ -64,19 +78,17 @@ module PortalSeoHelper
   end
 
   def article_breadcrumb_items(portal, article)
-    base = portal_base_url(portal)
     locale = article.category&.locale || portal.default_locale
-    items = [{ name: I18n.t('public_portal.common.home'), url: "#{base}#{generate_home_link(portal.slug, locale, false, false)}" }]
-    items << { name: article.category.name, url: "#{base}#{category_path_for(portal, article.category)}" } if article.category
-    items << { name: article.title, url: "#{base}#{generate_article_link(portal.slug, article.slug, false, false)}" }
+    items = [{ name: I18n.t('public_portal.common.home'), url: portal_url(portal, home_path_for(portal, locale)) }]
+    items << { name: article.category.name, url: portal_url(portal, category_path_for(portal, article.category)) } if article.category
+    items << { name: article.title, url: portal_url(portal, article_path_for(portal, article)) }
     items
   end
 
   def category_breadcrumb_items(portal, category)
-    base = portal_base_url(portal)
     [
-      { name: I18n.t('public_portal.common.home'), url: "#{base}#{generate_home_link(portal.slug, category.locale, false, false)}" },
-      { name: category.name, url: "#{base}#{category_path_for(portal, category)}" }
+      { name: I18n.t('public_portal.common.home'), url: portal_url(portal, home_path_for(portal, category.locale)) },
+      { name: category.name, url: portal_url(portal, category_path_for(portal, category)) }
     ]
   end
 end

@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
-  <% base = portal_base_url(@portal) %>
-  <% locales = Array(@portal.config['allowed_locales']).presence || [@portal.default_locale] %>
-
   <%# Portal home (per locale) %>
   <% home_alternates = portal_home_alternate_links(@portal) %>
-  <% locales.each do |locale| %>
+  <% portal_locales(@portal).each do |locale| %>
     <url>
-      <loc><%= base %><%= generate_home_link(@portal.slug, locale, false, false) %></loc>
+      <loc><%= portal_url(@portal, home_path_for(@portal, locale)) %></loc>
       <lastmod><%= @portal.updated_at.strftime("%Y-%m-%d") %></lastmod>
       <changefreq>weekly</changefreq>
       <priority>1.0</priority>
@@ -20,7 +17,7 @@
   <%# Categories that contain published articles %>
   <% @portal.categories.joins(:articles).where(articles: { status: :published }).group('categories.id').order(position: :asc).each do |category| %>
     <url>
-      <loc><%= base %><%= generate_category_link(portal_slug: @portal.slug, category_locale: category.locale, category_slug: category.slug, theme: false, is_plain_layout_enabled: false) %></loc>
+      <loc><%= portal_url(@portal, category_path_for(@portal, category)) %></loc>
       <lastmod><%= category.updated_at.strftime("%Y-%m-%d") %></lastmod>
       <changefreq>weekly</changefreq>
       <priority>0.8</priority>
@@ -33,7 +30,7 @@
   <%# Published articles %>
   <% @portal.articles.where(status: :published).each do |article| %>
     <url>
-      <loc><%= base %><%= generate_article_link(@portal.slug, article.slug, false, false) %></loc>
+      <loc><%= portal_url(@portal, article_path_for(@portal, article)) %></loc>
       <lastmod><%= article.updated_at.strftime("%Y-%m-%d") %></lastmod>
       <changefreq>monthly</changefreq>
       <priority>0.7</priority>
